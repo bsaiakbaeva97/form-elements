@@ -3,8 +3,8 @@
 describe('Login Form', () => {
 
     beforeEach(() => {
-            cy.visit('https://techglobal-training.com/frontend/project-1');
-        });
+        cy.visit('https://techglobal-training.com/frontend/project-1');
+    });
 
     it('Validate the Contact Us Information', () => {
     
@@ -36,35 +36,35 @@ describe('Login Form', () => {
     Click on the “Female” option and validate it is selected while the others are not selected
     */
 
-    cy.get('.control > .label').should('have.text', 'Gender *');
-    cy.get('[class$=radio] > input').should('have.attr', 'required');
+        cy.get('.control > .label').should('have.text', 'Gender *');
+        cy.get('[class$=radio] > input').should('have.attr', 'required');
 
-    const inputs = ['Male', 'Female', 'Prefer not to disclose']
+        const inputs = ['Male', 'Female', 'Prefer not to disclose']
 
-    cy.get('.radio').each(($el, index) => {       
-         cy.wrap($el)
-         .should('have.text', inputs[index])  
-         .find('input')
-         .and('be.visible')
-         .and('not.be.checked')
-         
-    });
+        cy.get('.radio').each(($el, index) => {       
+            cy.wrap($el)
+            .should('have.text', inputs[index])  
+            .find('input')
+            .and('be.visible')
+            .and('not.be.checked')
+            
+        });
 
        
-     cy.get('.radio').contains(inputs[0]).click();
-     cy.get('.mr-1').each(($el, index) => {
+        cy.get('.radio').contains(inputs[0]).click();
+        cy.get('.mr-1').each(($el, index) => {
 
-         if(inputs[index] === 'Male') cy.wrap($el).check().should('be.checked')
-         else cy.wrap($el).should('not.be.checked');
-         
-       });
+            if(inputs[index] === 'Male') cy.wrap($el).check().should('be.checked')
+            else cy.wrap($el).should('not.be.checked');
+            
+        });
 
-     cy.get('.radio').contains(inputs[1]).click();
-     cy.get('.mr-1').each(($el, index) => {
-         
-         if(inputs[index] === 'Female') cy.wrap($el).check().should('be.checked')
-         else cy.wrap($el).should('not.be.checked')
-       });
+        cy.get('.radio').contains(inputs[1]).click();
+        cy.get('.mr-1').each(($el, index) => {
+            
+            if(inputs[index] === 'Female') cy.wrap($el).check().should('be.checked')
+            else cy.wrap($el).should('not.be.checked')
+        });
     });        
 
        
@@ -140,7 +140,7 @@ describe('Login Form', () => {
         
     });
 
-    it('Validate the Message text area', () => {
+    it('Validate the Consent text box', () => {
         /*
         Validate the label is “I give my consent to be contacted.”
         Validate that the Consent checkbox is required
@@ -150,6 +150,90 @@ describe('Login Form', () => {
         */
 
 
+        cy.get('.field:nth-child(7) label')
+        .should('have.text', ' I give my consent to be contacted.')
+
+        cy.get('.field:nth-child(7) input')
+        .should('be.enabled')
+        .check()
+        .and('be.checked')
+        .uncheck()
+        .and('not.be.checked')
+        .and('have.attr', 'required') 
+    });
+
+    it('Validate the Submit button', () => {
+        /*
+        Validate the “SUBMIT” button is displayed
+        Validate the “SUBMIT” button is clickable
+        Validate that the button text is “SUBMIT”
+        */
+        cy.get('[type="submit"]')
+        .should('have.text', 'SUBMIT')
+        .and('be.visible')
+        .and('be.enabled')
+    });
+
+
+    it.only('Validate the Form submission', () => {
+        /*
+        Enter a first name
+        Select a gender
+        Enter an address
+        Enter an email
+        Enter a phone number
+        Enter a message
+        Select the “I give my consent to be contacted.” checkbox
+        Click on the “SUBMIT” button
+        Validate the form message “Thanks for submitting!” is displayed under the “SUBMIT” button
+        */
+        cy.get('.field:nth-child(1) .input')
+        .type('Bermet Saiakbaeva');
+
+        cy.get('.radio')
+        .contains('Female')
+        .click();
+
+        cy.get('.field:nth-child(3) input')
+        .type('7632 N Milwaukee Ave');
+
+        cy.get('.field:nth-child(4) input')
+        .type('bsaikabaeva97@gmail.com');
+
+        cy.get('.field:nth-child(5) input')
+        .type('312-833-1736');
+
+        cy.get('.textarea')
+        .type('Thank you for your time!');
+
+        cy.get('.field:nth-child(7) label')
+        .click();
+
+        // Error occurred on this line
+        cy.get('[type="submit"]')
+       .click();
+
+        /* The error on Form Submission. (Message from DOM console)
+        Project1.jsx:9 Uncaught TypeError: Cannot read properties of undefined (reading 'preventDefault')
+        at i (Project1.jsx:9:9)
+        at onClick (Project1.jsx:115:72)
+        at Object.Le (react-dom.production.min.js:54:317)
+        at Be (react-dom.production.min.js:54:471)
+        at react-dom.production.min.js:55:35
+        at jr (react-dom.production.min.js:105:68)
+        at Fr (react-dom.production.min.js:106:380)
+        at react-dom.production.min.js:117:104
+        at uu (react-dom.production.min.js:274:42)
+        at Pe (react-dom.production.min.js:52:375)
+       */
+
+        // Unable to proceed
+        cy.get('.mt-5')
+        .should('be.visible')
+        .and('have.text', 'Thanks for submitting!')
         
-    })
+    });
+
+
 })
+
